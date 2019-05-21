@@ -9,7 +9,9 @@ final class ImageViewerDismissalTransition: NSObject, UIViewControllerAnimatedTr
     fileprivate var animatableImageview = AnimatableImageView()
     fileprivate var fromView: UIView?
     fileprivate var fadeView = UIView()
-    
+  
+    fileprivate var completion: (() -> Void)?
+
     enum TransitionState {
         case start
         case end
@@ -23,9 +25,10 @@ final class ImageViewerDismissalTransition: NSObject, UIViewControllerAnimatedTr
         didSet { updateTransform() }
     }
     
-    init(fromImageView: UIImageView, toImageView: UIImageView) {
+    init(fromImageView: UIImageView, toImageView: UIImageView, completion: (() -> Void)?) {
         self.fromImageView = fromImageView
         self.toImageView = toImageView
+        self.completion = completion
         super.init()
     }
     
@@ -92,6 +95,7 @@ final class ImageViewerDismissalTransition: NSObject, UIViewControllerAnimatedTr
                         self.animatableImageview.removeFromSuperview()
                         self.fromView?.removeFromSuperview()
                         self.transitionContext?.completeTransition(true)
+                        self.completion?()
         })
     }
 }
