@@ -12,7 +12,7 @@ public final class ImageViewerController: UIViewController {
     fileprivate var completion: (() -> Void)?
 
     public override var prefersStatusBarHidden: Bool {
-        return true
+        return false
     }
     
     public init(configuration: ImageViewerConfiguration?, completion: (() -> Void)?) {
