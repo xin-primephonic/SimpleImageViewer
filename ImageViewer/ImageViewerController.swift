@@ -142,12 +142,13 @@ private extension ImageViewerController {
             transitionHandler?.dismissalInteractor.update(percentage: percentage)
             transitionHandler?.dismissalInteractor.update(transform: CGAffineTransform(translationX: translation.x, y: translation.y))
         case .ended, .cancelled:
+            // Workaround for iOS 14 `preferredStatusBarStyle` not updating issue
+            // which is related to dismissalInteractor.finish()
             transitionHandler?.dismissInteractively = false
             let percentage = abs(translation.y + velocity.y) / imageView.bounds.height
+            transitionHandler?.dismissalInteractor.cancel()
             if percentage > 0.25 {
-                transitionHandler?.dismissalInteractor.finish()
-            } else {
-                transitionHandler?.dismissalInteractor.cancel()
+              dismiss(animated: true)
             }
         default: break
         }
